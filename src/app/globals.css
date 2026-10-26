@@ -1,0 +1,1391 @@
+@import "tailwindcss";
+
+/* ==================================================================
+   THEMES
+   Three complete palettes, switched with `data-theme` on <html>:
+
+     cyber  · deep-space purple + neon (default)
+     studio · high-end studio — warm paper, matte black accent
+     hacker · matrix green on pure black
+
+   Nothing in the app hard-codes a colour any more: components read
+   these tokens through Tailwind utilities (text-ink, bg-surface,
+   border-line, text-accent, …) so swapping the attribute repaints
+   the whole site.
+================================================================== */
+
+:root,
+[data-theme="cyber"] {
+  color-scheme: dark;
+
+  --canvas: #030014;
+  --canvas-deep: #05040d;
+  --panel: #0b0918;
+
+  --ink-strong: #ffffff;
+  --ink: #dfe3ec;
+  --ink-soft: #cbd5e1;
+  --ink-mute: #94a3b8;
+  --ink-dim: #64748b;
+
+  --surface: rgba(255, 255, 255, 0.055);
+  --surface-2: rgba(255, 255, 255, 0.03);
+  --surface-3: rgba(255, 255, 255, 0.018);
+
+  --line: rgba(255, 255, 255, 0.1);
+  --line-strong: rgba(255, 255, 255, 0.2);
+  --edge: rgba(255, 255, 255, 0.08);
+
+  --accent: #8b5cf6;
+  --accent-soft: #a78bfa;
+  --accent-strong: #c4b5fd;
+  --accent-2: #22d3ee;
+  --accent-2-soft: #67e8f9;
+  --accent-3: #34d399;
+  --accent-3-soft: #6ee7b7;
+  --accent-4: #ec4899;
+  --accent-4-soft: #f9a8d4;
+
+  /* rgb triplets so glows can be re-tinted: rgba(var(--glow), 0.6) */
+  --glow: 139, 92, 246;
+  --glow-2: 34, 211, 238;
+  --glow-3: 52, 211, 153;
+  --glow-4: 236, 72, 153;
+
+  --wash: radial-gradient(
+    120% 80% at 50% -10%,
+    #140b33 0%,
+    #07061a 45%,
+    #030014 100%
+  );
+  --vignette: radial-gradient(
+    100% 100% at 50% 50%,
+    transparent 35%,
+    rgba(3, 0, 20, 0.85) 100%
+  );
+  --grid-line: rgba(255, 255, 255, 0.045);
+  --grain: 0.035;
+
+  --aurora-1: rgba(139, 92, 246, 0.35);
+  --aurora-2: rgba(34, 211, 238, 0.25);
+  --aurora-3: rgba(52, 211, 153, 0.18);
+
+  --star: rgba(255, 255, 255, 0.75);
+  --star-tint: rgba(196, 181, 253, 0.9);
+  --star-tint-2: rgba(103, 232, 249, 0.85);
+  --star-tint-3: rgba(236, 72, 153, 0.85);
+}
+
+[data-theme="studio"] {
+  color-scheme: light;
+
+  --canvas: #f3f3f1;
+  --canvas-deep: #e7e7e4;
+  --panel: #ffffff;
+
+  --ink-strong: #0a0a0c;
+  --ink: #23252b;
+  --ink-soft: #3d4048;
+  --ink-mute: #6b7078;
+  --ink-dim: #8d9299;
+
+  --surface: rgba(12, 12, 14, 0.05);
+  --surface-2: rgba(12, 12, 14, 0.032);
+  --surface-3: rgba(12, 12, 14, 0.018);
+
+  --line: rgba(12, 12, 14, 0.13);
+  --line-strong: rgba(12, 12, 14, 0.3);
+  --edge: rgba(12, 12, 14, 0.1);
+
+  /* every accent collapses to matte black — that *is* the studio look */
+  --accent: #111114;
+  --accent-soft: #3a3d45;
+  --accent-strong: #0a0a0c;
+  --accent-2: #111114;
+  --accent-2-soft: #4a4d55;
+  --accent-3: #1a1b20;
+  --accent-3-soft: #4a4d55;
+  --accent-4: #111114;
+  --accent-4-soft: #4a4d55;
+
+  --glow: 17, 17, 20;
+  --glow-2: 17, 17, 20;
+  --glow-3: 17, 17, 20;
+  --glow-4: 17, 17, 20;
+
+  --wash: radial-gradient(
+    120% 80% at 50% -10%,
+    #ffffff 0%,
+    #f6f6f4 45%,
+    #eeeeef 100%
+  );
+  --vignette: radial-gradient(
+    100% 100% at 50% 50%,
+    transparent 45%,
+    rgba(12, 12, 14, 0.07) 100%
+  );
+  --grid-line: rgba(12, 12, 14, 0.05);
+  --grain: 0.018;
+
+  --aurora-1: rgba(12, 12, 14, 0.09);
+  --aurora-2: rgba(12, 12, 14, 0.07);
+  --aurora-3: rgba(12, 12, 14, 0.05);
+
+  --star: rgba(12, 12, 14, 0.22);
+  --star-tint: rgba(12, 12, 14, 0.18);
+  --star-tint-2: rgba(12, 12, 14, 0.16);
+  --star-tint-3: rgba(12, 12, 14, 0.14);
+}
+
+[data-theme="hacker"] {
+  color-scheme: dark;
+
+  --canvas: #000000;
+  --canvas-deep: #000000;
+  --panel: #04120a;
+
+  --ink-strong: #ccffe0;
+  --ink: #7dffb0;
+  --ink-soft: #55e08c;
+  --ink-mute: #2fa864;
+  --ink-dim: #1f7a47;
+
+  --surface: rgba(0, 255, 130, 0.05);
+  --surface-2: rgba(0, 255, 130, 0.03);
+  --surface-3: rgba(0, 255, 130, 0.018);
+
+  --line: rgba(0, 255, 130, 0.2);
+  --line-strong: rgba(0, 255, 130, 0.45);
+  --edge: rgba(0, 255, 130, 0.16);
+
+  --accent: #00ff9c;
+  --accent-soft: #6dffbe;
+  --accent-strong: #c4ffe0;
+  --accent-2: #00e07f;
+  --accent-2-soft: #6bffb4;
+  --accent-3: #00c46a;
+  --accent-3-soft: #57e79b;
+  --accent-4: #00ff9c;
+  --accent-4-soft: #9dffcd;
+
+  --glow: 0, 255, 156;
+  --glow-2: 0, 224, 127;
+  --glow-3: 0, 196, 106;
+  --glow-4: 0, 255, 156;
+
+  --wash: radial-gradient(
+    120% 80% at 50% -10%,
+    #04180d 0%,
+    #000000 55%,
+    #000000 100%
+  );
+  --vignette: radial-gradient(
+    100% 100% at 50% 50%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.92) 100%
+  );
+  --grid-line: rgba(0, 255, 130, 0.08);
+  --grain: 0.05;
+
+  --aurora-1: rgba(0, 255, 130, 0.14);
+  --aurora-2: rgba(0, 224, 127, 0.1);
+  --aurora-3: rgba(0, 196, 106, 0.08);
+
+  --star: rgba(0, 255, 130, 0.45);
+  --star-tint: rgba(0, 255, 156, 0.55);
+  --star-tint-2: rgba(0, 224, 127, 0.5);
+  --star-tint-3: rgba(0, 255, 156, 0.35);
+}
+
+@theme {
+  --radius-4xl: 2rem;
+}
+
+/* `inline` keeps the var reference in the generated utility, so
+   `text-accent` really means `color: var(--accent)` at runtime. */
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --color-canvas: var(--canvas);
+  --color-canvas-deep: var(--canvas-deep);
+  --color-panel: var(--panel);
+
+  --color-ink-strong: var(--ink-strong);
+  --color-ink: var(--ink);
+  --color-ink-soft: var(--ink-soft);
+  --color-ink-mute: var(--ink-mute);
+  --color-ink-dim: var(--ink-dim);
+
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-2: var(--accent-2);
+  --color-accent-2-soft: var(--accent-2-soft);
+  --color-accent-3: var(--accent-3);
+  --color-accent-3-soft: var(--accent-3-soft);
+  --color-accent-4: var(--accent-4);
+  --color-accent-4-soft: var(--accent-4-soft);
+}
+
+/* ------------------------------------------------------------------
+   BASE
+------------------------------------------------------------------ */
+@layer base {
+  * {
+    border-color: var(--edge);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    /* x is clipped for the decorative overflow; y must always stay scrollable */
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--ink-strong);
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: rgba(var(--glow), 0.4);
+    color: var(--ink-strong);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--accent-2);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--canvas-deep);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, var(--accent), var(--accent-2));
+    border-radius: 999px;
+    border: 2px solid var(--canvas-deep);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, var(--accent-soft), var(--accent-2-soft));
+  }
+}
+
+/* ------------------------------------------------------------------
+   SURFACES / GLASS
+------------------------------------------------------------------ */
+/* Blur-free panel surfaces. A `backdrop-filter` inside a scrolling page
+   forces the browser to re-rasterise everything behind it on every frame —
+   with dozens of cards that alone is what makes scrolling stutter. These
+   use a solid translucent panel instead: visually near-identical, free. */
+.glass {
+  background: color-mix(in srgb, var(--panel) 80%, transparent);
+  border: 1px solid var(--line);
+}
+
+.glass-soft {
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  border: 1px solid var(--line);
+}
+
+/* the one surface where the frost actually shows and is worth its cost:
+   the floating navbar (a handful of elements, not dozens) */
+.glass-nav {
+  background: color-mix(in srgb, var(--panel) 74%, transparent);
+  backdrop-filter: blur(16px) saturate(150%);
+  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid var(--line);
+}
+
+/* the terminal stays deliberately dark in all three themes so its green
+   and cyan output is always readable — even on the light studio canvas */
+.terminal-shell {
+  background: #0a0817;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* gradient hairline border */
+.ring-glow {
+  position: relative;
+}
+.ring-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--glow), 0.55),
+    rgba(var(--glow-2), 0.28) 45%,
+    transparent 70%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+.ring-glow:hover::after,
+.ring-glow:focus-within::after {
+  opacity: 1;
+}
+
+/* ------------------------------------------------------------------
+   TEXT TREATMENTS
+------------------------------------------------------------------ */
+.text-gradient {
+  background: linear-gradient(
+    100deg,
+    var(--ink-strong) 0%,
+    var(--accent-strong) 40%,
+    var(--accent-2-soft) 85%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* hero headline gradient — accent → accent-4 → accent-2 */
+.text-hero-gradient {
+  background: linear-gradient(
+    100deg,
+    var(--accent-strong) 0%,
+    var(--accent) 34%,
+    var(--accent-4) 68%,
+    var(--accent-2-soft) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* chrome / silver gradient for the top headline line */
+.text-silver-gradient {
+  background: linear-gradient(
+    180deg,
+    var(--ink-strong) 0%,
+    var(--ink) 52%,
+    var(--ink-mute) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.text-outline {
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--ink-strong) 30%, transparent);
+}
+
+.text-glow-purple {
+  text-shadow: 0 0 24px rgba(var(--glow), 0.55);
+}
+
+.mono-label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+/* ------------------------------------------------------------------
+   BACKGROUND FX
+------------------------------------------------------------------ */
+.grid-lines {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.aurora {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(64px);
+  opacity: 0.5;
+  /* promoted once, then only its transform ever changes — the blurred
+     texture is cached on the GPU and never re-rasterised while scrolling */
+  transform: translateZ(0);
+  will-change: transform;
+  backface-visibility: hidden;
+}
+
+.noise {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+.mask-fade-y {
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+.mask-fade-x {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+/* ------------------------------------------------------------------
+   ANIMATIONS
+------------------------------------------------------------------ */
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(4%, -6%, 0) scale(1.12);
+  }
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    box-shadow: 0 0 0 0 rgba(var(--glow-3), 0.55);
+  }
+  70% {
+    box-shadow: 0 0 0 9px rgba(var(--glow-3), 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(var(--glow-3), 0);
+  }
+}
+
+@keyframes caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(1200%);
+  }
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.anim-float {
+  animation: float-slow 18s ease-in-out infinite;
+}
+.anim-marquee {
+  animation: marquee 34s linear infinite;
+  will-change: transform;
+}
+.anim-pulse-ring {
+  animation: pulse-ring 2.4s ease-out infinite;
+}
+.anim-caret {
+  animation: caret 1.05s step-end infinite;
+}
+.anim-spin-slow {
+  animation: spin-slow 22s linear infinite;
+}
+.anim-scan {
+  animation: scan 5.5s linear infinite;
+}
+
+.marquee-track:hover .anim-marquee {
+  animation-play-state: paused;
+}
+
+/* ------------------------------------------------------------------
+   HERO FX — starfield, drifting grid, aura, abstract shape
+------------------------------------------------------------------ */
+/* translate, not background-position — a transformed layer is composited
+   on the GPU, whereas an animated background-position repaints every frame */
+@keyframes grid-drift {
+  to {
+    transform: translate3d(56px, 56px, 0);
+  }
+}
+
+@keyframes star-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-420px, 300px, 0);
+  }
+}
+
+@keyframes star-twinkle {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.8;
+  }
+}
+
+/* transform + opacity only. Morphing `border-radius` forced a full
+   repaint of the blurred layer on every frame — a major scroll-jank source. */
+@keyframes orb-morph {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.06);
+  }
+}
+
+@keyframes halo-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* drifting technical grid */
+.grid-drift {
+  position: absolute;
+  /* oversized so the 56px travel never exposes an edge */
+  inset: -70px;
+  background-image:
+    linear-gradient(rgba(var(--glow), 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(var(--glow-2), 0.07) 1px, transparent 1px);
+  background-size: 56px 56px;
+  animation: grid-drift 22s linear infinite;
+  will-change: transform;
+}
+
+/* three parallax star layers */
+.starfield {
+  background-image:
+    radial-gradient(1px 1px at 12% 22%, var(--star), transparent),
+    radial-gradient(1px 1px at 68% 12%, var(--star) , transparent),
+    radial-gradient(1px 1px at 34% 78%, var(--star), transparent),
+    radial-gradient(1px 1px at 84% 62%, var(--star), transparent),
+    radial-gradient(1px 1px at 52% 44%, var(--star), transparent),
+    radial-gradient(1.6px 1.6px at 22% 66%, var(--star-tint), transparent),
+    radial-gradient(1.6px 1.6px at 78% 34%, var(--star-tint-2), transparent),
+    radial-gradient(1.4px 1.4px at 44% 14%, var(--star), transparent),
+    radial-gradient(2px 2px at 62% 82%, var(--star-tint), transparent),
+    radial-gradient(2px 2px at 16% 48%, var(--star-tint-2), transparent);
+  background-size:
+    240px 240px,
+    240px 240px,
+    240px 240px,
+    240px 240px,
+    240px 240px,
+    380px 380px,
+    380px 380px,
+    380px 380px,
+    520px 520px,
+    520px 520px;
+  animation: star-drift 170s linear infinite;
+  position: absolute;
+  /* the drift travels 420×300px, so the layer is padded to match — an
+     oversized composited layer paints once, a repainted one never rests */
+  inset: -460px;
+  will-change: transform;
+}
+
+.starfield-twinkle {
+  background-image:
+    radial-gradient(1.4px 1.4px at 30% 40%, var(--star-tint), transparent),
+    radial-gradient(1.4px 1.4px at 72% 68%, var(--star-tint-2), transparent),
+    radial-gradient(1.4px 1.4px at 88% 18%, var(--star-tint-3), transparent);
+  background-size:
+    340px 340px,
+    440px 440px,
+    600px 600px;
+  animation: star-twinkle 6s ease-in-out infinite;
+}
+
+/* morphing orb + glowing rings for the abstract shape */
+.hero-orb {
+  background: conic-gradient(
+    from 120deg,
+    var(--accent),
+    var(--accent-2),
+    var(--accent-4),
+    var(--accent)
+  );
+  filter: blur(46px);
+  opacity: 0.32;
+  animation: orb-morph 18s ease-in-out infinite;
+}
+
+.hero-ring {
+  border-radius: 999px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(var(--glow), 0.7) 70deg,
+    rgba(var(--glow-2), 0.55) 140deg,
+    transparent 220deg
+  );
+  -webkit-mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 1.5px),
+    #000 calc(100% - 1.5px)
+  );
+  mask: radial-gradient(
+    farthest-side,
+    transparent calc(100% - 1.5px),
+    #000 calc(100% - 1.5px)
+  );
+  animation: halo-spin 16s linear infinite;
+}
+
+.hero-ring-rev {
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  animation: halo-spin 26s linear infinite reverse;
+}
+
+.hero-ring-dashed {
+  border-radius: 999px;
+  border: 1px dashed var(--line-strong);
+}
+
+/* ------------------------------------------------------------------
+   CTA — liquid glowing border
+------------------------------------------------------------------ */
+.liquid-btn {
+  position: relative;
+  isolation: isolate;
+}
+
+.liquid-btn__ring {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  width: 160%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    rgba(var(--glow), 0.95) 55deg,
+    rgba(var(--glow-2), 0.9) 120deg,
+    rgba(var(--glow-3), 0.9) 185deg,
+    transparent 250deg,
+    transparent 360deg
+  );
+  animation: halo-spin 3.6s linear infinite;
+}
+
+.liquid-btn__ring-alt {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  width: 160%;
+  aspect-ratio: 1;
+  translate: -50% -50%;
+  opacity: 0.65;
+  mix-blend-mode: screen;
+  background: conic-gradient(
+    from 180deg,
+    transparent 0deg,
+    rgba(var(--glow-2), 0.85) 70deg,
+    rgba(var(--glow), 0.8) 150deg,
+    transparent 240deg,
+    transparent 360deg
+  );
+  animation: halo-spin 6.4s linear infinite reverse;
+}
+
+.liquid-btn__face {
+  position: absolute;
+  inset: 1.5px;
+  z-index: 1;
+  border-radius: inherit;
+  /* solid panel instead of a blur — this face sits inside the hero, and a
+     backdrop blur there forced a re-rasterise of the animated backdrop */
+  background: color-mix(in srgb, var(--panel) 94%, transparent);
+  transition: background 0.5s ease;
+}
+
+.liquid-btn:hover .liquid-btn__face {
+  background: color-mix(in srgb, var(--panel) 80%, transparent);
+}
+
+/* ------------------------------------------------------------------
+   BENTO CARDS — glass surface + neon glow that appears ONLY on hover
+------------------------------------------------------------------ */
+.bento-card {
+  position: relative;
+  border: 1px solid var(--line);
+  /* promoted to its own compositor layer so the hover lift re-uses a
+     cached texture instead of repainting the card on every frame */
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  transition:
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.5s ease,
+    box-shadow 0.5s ease;
+}
+
+@media (hover: hover) {
+  .bento-card:hover,
+  .bento-card:focus-within {
+    transform: translateY(-4px);
+    border-color: var(--line-strong);
+    box-shadow:
+      0 34px 80px -44px rgba(var(--glow), 0.95),
+      0 0 70px -28px rgba(var(--glow-2), 0.6);
+  }
+}
+
+/* neon hairline border that sweeps in on hover */
+.bento-glow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--glow), 0.95) 0%,
+    rgba(var(--glow-2), 0.6) 42%,
+    rgba(var(--glow-3), 0.5) 72%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+}
+
+@media (hover: hover) {
+  .bento-glow:hover::after,
+  .bento-glow:focus-within::after {
+    opacity: 1;
+  }
+}
+
+/* tech-stack tags — slide up from below on hover (hover-capable devices only) */
+.tag-reveal {
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .tag-reveal {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  .bento-card:hover .tag-reveal,
+  .bento-card:focus-within .tag-reveal {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .bento-card:hover .tag-reveal:nth-child(2) {
+    transition-delay: 0.05s;
+  }
+  .bento-card:hover .tag-reveal:nth-child(3) {
+    transition-delay: 0.1s;
+  }
+  .bento-card:hover .tag-reveal:nth-child(4) {
+    transition-delay: 0.15s;
+  }
+  .bento-card:hover .tag-reveal:nth-child(5) {
+    transition-delay: 0.2s;
+  }
+}
+
+/* ------------------------------------------------------------------
+   SKILL BADGES — floating chips that glow in their brand colour
+   `--brand-raw` is set inline per badge (the real brand hex). The
+   studio & hacker themes override the derived `--brand*` below so a
+   rainbow of vendor colours can't fight the palette.
+------------------------------------------------------------------ */
+@keyframes badge-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+.badge-float {
+  animation: badge-bob 9s ease-in-out infinite;
+  /* ~28 badges bob forever, so each one earns its own composited layer —
+     without the hint the browser repaints every badge on every frame */
+  will-change: transform;
+}
+
+.badge {
+  --brand: var(--brand-raw, var(--accent));
+  --brand-soft: color-mix(in srgb, var(--brand) 16%, transparent);
+  --brand-edge: color-mix(in srgb, var(--brand) 55%, transparent);
+
+  position: relative;
+  border: 1px solid var(--line);
+  /* no backdrop-filter — ~30 of these float at once and a blur per
+     badge is the single most expensive thing on the skills section */
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--panel) 70%, transparent),
+    color-mix(in srgb, var(--panel) 45%, transparent)
+  );
+  transform: translateZ(0);
+  transition:
+    border-color 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+.badge__mono {
+  transition:
+    color 0.4s ease,
+    background-color 0.4s ease,
+    border-color 0.4s ease,
+    box-shadow 0.45s ease;
+}
+
+.badge__level {
+  transition: color 0.4s ease;
+}
+
+/* tooltip — hidden until hover, on hover-capable devices only */
+.badge__tip {
+  position: absolute;
+  bottom: calc(100% + 0.7rem);
+  left: 50%;
+  z-index: 30;
+  transform: translate(-50%, 6px) scale(0.96);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  transition:
+    opacity 0.28s ease,
+    transform 0.38s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .badge:hover,
+  .badge:focus-visible {
+    border-color: var(--brand-edge);
+    box-shadow:
+      0 0 0 1px var(--brand-soft),
+      0 14px 40px -20px var(--brand),
+      0 0 34px -14px var(--brand);
+  }
+
+  .badge:hover .badge__mono,
+  .badge:focus-visible .badge__mono {
+    color: var(--brand);
+    border-color: var(--brand-edge);
+    background-color: var(--brand-soft);
+    box-shadow: 0 0 22px -6px var(--brand);
+  }
+
+  .badge:hover .badge__level,
+  .badge:focus-visible .badge__level {
+    color: var(--brand);
+  }
+
+  .badge:hover .badge__tip,
+  .badge:focus-visible .badge__tip {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+  }
+}
+
+/* ------------------------------------------------------------------
+   DOT NAV — left vertical section rail
+------------------------------------------------------------------ */
+@keyframes dot-halo-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(var(--glow), 0.4),
+      0 0 18px -4px rgba(var(--glow), 0.75);
+  }
+  50% {
+    box-shadow:
+      0 0 0 6px rgba(var(--glow), 0),
+      0 0 22px -2px rgba(var(--glow-2), 0.6);
+  }
+}
+
+.dot-nav__halo {
+  animation: dot-halo-pulse 2.8s ease-in-out infinite;
+}
+
+.dot-nav__dot {
+  transition:
+    transform 0.36s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.36s ease,
+    box-shadow 0.36s ease;
+}
+
+.dot-nav__dot--active {
+  transform: scale(1.45);
+  background-color: var(--ink-strong);
+  box-shadow: 0 0 12px 2px rgba(var(--glow), 0.85);
+}
+
+/* tooltip — opens to the right of the dot */
+.dot-nav__tip {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 0.5rem);
+  z-index: 40;
+  transform: translate(-6px, -50%) scale(0.94);
+  transform-origin: left center;
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  transition:
+    opacity 0.26s ease,
+    transform 0.36s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@media (hover: hover) {
+  .dot-nav__btn:hover .dot-nav__dot,
+  .dot-nav__btn:focus-visible .dot-nav__dot {
+    transform: scale(1.7);
+    background-color: var(--ink-strong);
+    box-shadow: 0 0 14px 3px rgba(var(--glow), 0.8);
+  }
+
+  .dot-nav__btn:hover .dot-nav__tip,
+  .dot-nav__btn:focus-visible .dot-nav__tip {
+    opacity: 1;
+    transform: translate(0, -50%) scale(1);
+  }
+}
+
+/* ------------------------------------------------------------------
+   CUSTOM CURSOR — glowing dot + magnetic trailing ring
+   `html.cursor-none` is only added by Cursor.tsx once it knows the
+   device has a fine pointer, so touch screens never lose their cursor.
+------------------------------------------------------------------ */
+html.cursor-none,
+html.cursor-none * {
+  cursor: none !important;
+}
+
+/* typing fields keep a real caret cursor so text entry never feels broken */
+html.cursor-none input,
+html.cursor-none textarea,
+html.cursor-none select,
+html.cursor-none [contenteditable="true"] {
+  cursor: auto !important;
+}
+
+/* the ring — sits on the lagging spring, so it drifts behind the dot */
+.cursor-ring {
+  /* Centred inside the zero-size anchor that Framer translates. Keeping
+     the centring on this element (never the motion element) means the
+     press-scale below can't multiply the anchor's translation. */
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%)
+    scale(calc(var(--cursor-scale, 1) * var(--cursor-press, 1)));
+  display: grid;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(var(--glow), 0.5);
+  background: rgba(var(--glow), 0.05);
+  box-shadow:
+    0 0 20px -6px rgba(var(--glow), 0.75),
+    inset 0 0 14px -8px rgba(var(--glow-2), 0.9);
+  opacity: 0;
+  will-change: transform;
+  transition:
+    width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    height 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.18s ease,
+    opacity 0.35s ease,
+    border-color 0.45s ease,
+    background-color 0.45s ease,
+    box-shadow 0.45s ease;
+}
+
+.cursor-ring[data-visible="true"] {
+  opacity: 1;
+}
+
+/* hovering a link or button — the ring opens up a touch */
+.cursor-ring[data-mode="link"] {
+  width: 3.1rem;
+  height: 3.1rem;
+  border-color: rgba(var(--glow-2), 0.7);
+  background: rgba(var(--glow-2), 0.08);
+}
+
+/* hovering a project card — a full "View Project" badge.
+   Deliberately blur-free: this ring tracks the pointer every frame, and a
+   moving backdrop-filter would force the browser to re-blur the page
+   underneath on every one of those frames. A layered rgba fill reads the
+   same without the per-frame cost. */
+.cursor-ring[data-mode="view"] {
+  width: 7rem;
+  height: 7rem;
+  border-color: rgba(var(--glow-2), 0.8);
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      rgba(var(--glow), 0.22),
+      rgba(var(--glow), 0.1) 62%,
+      rgba(var(--glow), 0.04)
+    );
+  box-shadow:
+    0 0 46px -8px rgba(var(--glow), 0.95),
+    0 0 90px -20px rgba(var(--glow-2), 0.8),
+    inset 0 0 30px -12px rgba(var(--glow-2), 0.9);
+}
+
+.cursor-ring__label {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-size: 0.54rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--ink-strong);
+  opacity: 0;
+  transform: scale(0.86);
+  transition:
+    opacity 0.3s ease 0.06s,
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.06s;
+}
+
+.cursor-ring[data-mode="view"] .cursor-ring__label {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* the dot — snaps onto the pointer, so it feels exact rather than floaty */
+.cursor-dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  transform: translate(-50%, -50%)
+    scale(calc(var(--cursor-scale, 1) * var(--cursor-press, 1)));
+  width: 0.44rem;
+  height: 0.44rem;
+  border-radius: 999px;
+  background: var(--ink-strong);
+  box-shadow:
+    0 0 10px 1px rgba(var(--glow-2), 0.95),
+    0 0 26px 4px rgba(var(--glow), 0.7);
+  opacity: 0;
+  will-change: transform;
+  transition:
+    opacity 0.3s ease,
+    transform 0.16s ease,
+    background-color 0.4s ease,
+    box-shadow 0.4s ease;
+}
+
+.cursor-dot[data-visible="true"] {
+  opacity: 1;
+}
+
+.cursor-dot[data-mode="link"] {
+  --cursor-scale: 0.7;
+}
+
+/* the dot hands over to the badge while a project card is hovered */
+.cursor-dot[data-mode="view"] {
+  opacity: 0;
+}
+
+/* press feedback — both layers settle inward. Driven through the same
+   `scale()` that carries the centring (never the standalone `scale`
+   property, which CSS composes *before* the translation and would
+   therefore scale the anchor's position too — that was the bug that made
+   the cursor jump toward the top-left corner on every click). */
+html.cursor-press .cursor-ring {
+  --cursor-press: 0.86;
+}
+
+html.cursor-press .cursor-dot {
+  --cursor-press: 0.5;
+}
+
+/* belt & braces: never show it on a touch screen */
+@media (hover: none), (pointer: coarse) {
+  .cursor-ring,
+  .cursor-dot {
+    display: none !important;
+  }
+}
+
+/* ------------------------------------------------------------------
+   ARCHITECTURE PLAYGROUND — node tiles + travelling connectors
+------------------------------------------------------------------ */
+@keyframes arch-flow {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+.arch-flow {
+  animation: arch-flow 1.6s linear infinite;
+}
+
+.arch-node {
+  border: 1px solid var(--line);
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--panel) 72%, transparent),
+    color-mix(in srgb, var(--panel) 48%, transparent)
+  );
+  transform: translateZ(0);
+  transition:
+    border-color 0.4s ease,
+    box-shadow 0.4s ease,
+    background 0.4s ease;
+}
+
+.arch-node__mono {
+  border-color: var(--line);
+  color: var(--ink-soft);
+  background-color: color-mix(in srgb, var(--ink-strong) 5%, transparent);
+  transition:
+    color 0.4s ease,
+    border-color 0.4s ease,
+    background-color 0.4s ease;
+}
+
+/* ------------------------------------------------------------------
+   THEME SWITCH — cross-fade
+   ThemeSwitcher adds `.theme-switching` to <html> for ~0.5s while it
+   swaps `data-theme`, so every tokenised colour glides instead of
+   snapping. transform / opacity are deliberately excluded so Framer
+   Motion's inline animations are never clobbered.
+------------------------------------------------------------------ */
+html.theme-switching *,
+html.theme-switching *::before,
+html.theme-switching *::after {
+  transition-property: background-color, border-color, color, fill, stroke,
+    box-shadow, outline-color, text-decoration-color !important;
+  transition-duration: 0.5s !important;
+  transition-timing-function: ease !important;
+}
+
+/* the ripple curtain that wipes the new theme in — see ThemeSwitcher.tsx */
+.theme-ripple {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  will-change: clip-path, opacity;
+}
+
+/* ------------------------------------------------------------------
+   THEME-SPECIFIC OVERRIDES
+------------------------------------------------------------------ */
+/* `screen` blending vanishes on a light canvas — drop it in studio */
+[data-theme="studio"] .liquid-btn__ring-alt {
+  mix-blend-mode: normal;
+  opacity: 0.35;
+}
+
+/* the aurora blobs need less blur & more presence on paper-white —
+   a smaller radius is also cheaper to keep composited while scrolling */
+[data-theme="studio"] .aurora {
+  filter: blur(48px);
+  opacity: 0.8;
+}
+
+/* studio & hacker render every skill badge / graph node in the theme's
+   own accent — a light canvas would swallow white brands like Next.js */
+[data-theme="studio"] .badge,
+[data-theme="hacker"] .badge,
+[data-theme="studio"] .arch-node,
+[data-theme="hacker"] .arch-node {
+  --brand: var(--accent);
+}
+
+/* ------------------------------------------------------------------
+   REDUCED MOTION
+------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .anim-float,
+  .anim-marquee,
+  .anim-pulse-ring,
+  .anim-caret,
+  .anim-spin-slow,
+  .anim-scan,
+  .grid-drift,
+  .starfield,
+  .starfield-twinkle,
+  .hero-orb,
+  .hero-ring,
+  .hero-ring-rev,
+  .liquid-btn__ring,
+  .liquid-btn__ring-alt,
+  .badge-float,
+  .dot-nav__halo,
+  .arch-flow {
+    animation: none !important;
+  }
+
+  /* nothing moves any more, so drop the compositor hints and let the
+     browser reclaim the layers */
+  .aurora,
+  .grid-drift,
+  .starfield,
+  .bento-card,
+  .badge,
+  .badge-float,
+  .anim-marquee,
+  .arch-node {
+    will-change: auto;
+  }
+
+  .bento-card,
+  .bento-card:hover,
+  .bento-card:focus-within {
+    transform: none;
+    transition: none;
+  }
+
+  .tag-reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .badge,
+  .badge:hover,
+  .badge:focus-visible,
+  .badge .badge__mono,
+  .badge:hover .badge__mono,
+  .badge:focus-visible .badge__mono {
+    transition: none !important;
+  }
+
+  .badge__tip,
+  .badge:hover .badge__tip,
+  .badge:focus-visible .badge__tip {
+    transition: none !important;
+  }
+
+  .dot-nav__dot,
+  .dot-nav__tip,
+  .dot-nav__btn:hover .dot-nav__dot,
+  .dot-nav__btn:focus-visible .dot-nav__dot,
+  .dot-nav__btn:hover .dot-nav__tip,
+  .dot-nav__btn:focus-visible .dot-nav__tip {
+    transition: none !important;
+  }
+
+  .arch-node,
+  .arch-node__mono {
+    transition: none !important;
+  }
+
+  /* the cursor itself still works — it just stops gliding and snapping */
+  .cursor-ring,
+  .cursor-ring__label,
+  .cursor-dot {
+    transition: none !important;
+  }
+}
