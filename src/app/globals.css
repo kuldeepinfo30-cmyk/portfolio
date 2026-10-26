@@ -247,15 +247,23 @@
     scroll-behavior: smooth;
     -webkit-tap-highlight-color: transparent;
     scroll-padding-top: 6rem;
+    /* `hidden` is the fallback for older mobile browsers, `clip` the modern
+       one. Clipping on <html> is what actually stops the sideways pan on
+       phones — `overflow-x` on <body> alone is ignored by iOS Safari.
+       `clip` (unlike `hidden`) does not turn the root into a scroll
+       container, so smooth scrolling and sticky positioning keep working. */
+    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   body {
     background-color: var(--canvas);
     color: var(--ink);
     font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-    /* x is clipped for the decorative overflow; y must always stay scrollable */
+    /* second line of defence for decorative overflow; y stays untouched so
+       the viewport remains the only vertical scroller */
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-x: clip;
   }
 
   h1,

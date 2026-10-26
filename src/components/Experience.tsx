@@ -33,7 +33,7 @@ export function Experience() {
                   </span>
 
                   <StaggerItem>
-                    <article className="bento-card bento-glow group relative rounded-3xl bg-surface p-5 sm:p-7">
+                    <article className="bento-card bento-glow group relative overflow-hidden rounded-3xl bg-surface p-5 sm:p-7">
                       <span
                         aria-hidden
                         className="pointer-events-none absolute -top-20 -right-16 h-40 w-40 rounded-full bg-accent/12 opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"

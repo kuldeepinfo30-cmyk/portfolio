@@ -82,10 +82,10 @@ export function Navbar() {
           opacity: ready ? 1 : 0,
         }}
         transition={{ duration: 0.8, ease: EASE, delay: ready ? 0.1 : 0 }}
-        className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-5 sm:pt-4"
+        className="fixed inset-x-0 top-0 z-50 px-2.5 pt-3 sm:px-5 sm:pt-4"
       >
         <nav
-          className={`mx-auto flex max-w-7xl items-center justify-between gap-3 rounded-2xl px-3 py-3 transition-all duration-500 sm:gap-4 sm:px-5 ${
+          className={`mx-auto flex max-w-7xl items-center justify-between gap-2 rounded-2xl px-2.5 py-3 transition-all duration-500 sm:gap-4 sm:px-5 ${
             scrolled
               ? "glass-nav shadow-[0_18px_60px_-30px_rgba(0,0,0,0.6)]"
               : "border border-transparent bg-transparent"
@@ -98,7 +98,7 @@ export function Navbar() {
               event.preventDefault();
               scrollToSection("#home");
             }}
-            className="group flex items-center gap-2.5 pl-1"
+            className="group flex min-w-0 items-center gap-2.5 pl-1"
             aria-label={`${site.name} — back to top`}
             title="Back to top"
           >
@@ -148,8 +148,9 @@ export function Navbar() {
             })}
           </ul>
 
-          {/* right side */}
-          <div className="flex items-center gap-2">
+          {/* right side — shrink-0 so the theme dots can never be squeezed
+              off the edge on the narrowest phones */}
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
             <span className="hidden items-center gap-2 rounded-full border border-accent-3/25 bg-accent-3/8 px-3 py-1.5 xl:flex">
               <span className="h-1.5 w-1.5 rounded-full bg-accent-3 anim-pulse-ring" />
               <span className="font-mono text-[0.62rem] tracking-[0.16em] text-accent-3-soft uppercase">
