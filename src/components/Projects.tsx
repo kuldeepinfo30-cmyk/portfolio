@@ -41,7 +41,7 @@ const MEDIUM_SPANS = ["lg:col-span-2", "lg:col-span-1"];
 
 export function Projects() {
   return (
-    <section id="work" className="relative py-24 sm:py-32">
+    <section id="work" className="relative py-16 sm:py-20">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
         <SectionHeading
           label="selected work"

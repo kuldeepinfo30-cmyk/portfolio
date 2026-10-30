@@ -1,22 +1,22 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { Close, Menu, Sparkle } from "@/components/ui/Icons";
 import { CTAButton, Magnetic } from "@/components/ui/Magnetic";
 import { ThemeSwitcher } from "@/components/ui/ThemeSwitcher";
 import { useReady } from "@/components/Intro";
 import { navLinks, site } from "@/lib/data";
 import { EASE } from "@/lib/motion";
-import { scrollToSection } from "@/lib/scroll";
 
 export function Navbar() {
   const ready = useReady();
+  const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
   const [hidden, setHidden] = useState(false);
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState("#home");
-  const pendingHref = useRef<string | null>(null);
 
   /* shrink + auto-hide on scroll down */
   useEffect(() => {
@@ -34,43 +34,12 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* active section highlight */
-  useEffect(() => {
-    const ids = navLinks.map((link) => link.href.replace("#", ""));
-    const sections = ids
-      .map((id) => document.getElementById(id))
-      .filter((el): el is HTMLElement => Boolean(el));
-
-    if (!sections.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) setActive(`#${entry.target.id}`);
-        });
-      },
-      { rootMargin: "-45% 0px -50% 0px", threshold: 0 },
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
-
   /* lock scroll while the mobile drawer is open */
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [open]);
-
-  /* the drawer holds the scroll lock, so honour its nav target once the
-     lock is released and the page can actually move again */
-  useEffect(() => {
-    if (open || !pendingHref.current) return;
-    const href = pendingHref.current;
-    pendingHref.current = null;
-    scrollToSection(href);
   }, [open]);
 
   return (
@@ -91,16 +60,12 @@ export function Navbar() {
               : "border border-transparent bg-transparent"
           }`}
         >
-          {/* avatar — scrolls back to the top */}
-          <a
-            href="#home"
-            onClick={(event) => {
-              event.preventDefault();
-              scrollToSection("#home");
-            }}
+          {/* avatar — always back to the landing page */}
+          <Link
+            href="/"
             className="group flex min-w-0 items-center gap-2.5 pl-1"
-            aria-label={`${site.name} — back to top`}
-            title="Back to top"
+            aria-label={`${site.name} — home`}
+            title="Home"
           >
             <span className="relative flex h-9 w-9 items-center justify-center rounded-full border border-line-strong bg-gradient-to-br from-accent/30 to-accent-2/15 font-mono text-[0.72rem] font-semibold text-ink-strong transition-all duration-400 group-hover:border-accent/60 group-hover:shadow-[0_0_20px_-4px_rgba(var(--glow),0.85)]">
               KY
@@ -114,20 +79,17 @@ export function Navbar() {
                 {site.role}
               </span>
             </span>
-          </a>
+          </Link>
 
-          {/* desktop links */}
+          {/* desktop links — every one is a real route */}
           <ul className="hidden items-center gap-1 rounded-full border border-line bg-surface-2 p-1 lg:flex">
             {navLinks.map((link) => {
-              const isActive = active === link.href;
+              const isActive = pathname === link.href;
               return (
                 <li key={link.href}>
-                  <a
+                  <Link
                     href={link.href}
-                    onClick={(event) => {
-                      event.preventDefault();
-                      scrollToSection(link.href);
-                    }}
+                    aria-current={isActive ? "page" : undefined}
                     className={`relative block rounded-full px-4 py-2 text-[0.8rem] font-medium transition-colors duration-300 ${
                       isActive
                         ? "text-ink-strong"
@@ -142,7 +104,7 @@ export function Navbar() {
                       />
                     ) : null}
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               );
             })}
@@ -162,7 +124,7 @@ export function Navbar() {
 
             <div className="hidden sm:block">
               <CTAButton
-                href="#contact"
+                href="/contact"
                 className="px-5 py-2.5 text-[0.8rem]"
                 strength={0.18}
                 icon={<Sparkle className="h-3.5 w-3.5" />}
@@ -232,20 +194,19 @@ export function Navbar() {
                         ease: EASE,
                       }}
                     >
-                      <a
+                      <Link
                         href={link.href}
-                        onClick={(event) => {
-                          event.preventDefault();
-                          pendingHref.current = link.href;
-                          setOpen(false);
-                        }}
-                        className="group flex items-baseline gap-3 border-b border-line py-3.5 text-2xl font-medium tracking-tight text-ink transition-colors hover:text-ink-strong"
+                        onClick={() => setOpen(false)}
+                        aria-current={pathname === link.href ? "page" : undefined}
+                        className={`group flex items-baseline gap-3 border-b border-line py-3.5 text-2xl font-medium tracking-tight transition-colors hover:text-ink-strong ${
+                          pathname === link.href ? "text-ink-strong" : "text-ink"
+                        }`}
                       >
                         <span className="font-mono text-[0.62rem] text-accent">
                           0{index + 1}
                         </span>
                         {link.label}
-                      </a>
+                      </Link>
                     </motion.li>
                   ))}
                 </ul>
@@ -263,7 +224,7 @@ export function Navbar() {
                   {site.email}
                 </a>
                 <CTAButton
-                  href="#contact"
+                  href="/contact"
                   className="w-full"
                   icon={<Sparkle className="h-4 w-4" />}
                 >

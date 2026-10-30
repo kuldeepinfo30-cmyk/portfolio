@@ -19,8 +19,28 @@ export const site = {
   resumeUrl: "#",
 };
 
+/**
+ * Top navigation — every entry is a real route, so clicking one opens a
+ * page instead of scrolling the landing page. `/` is the landing page and
+ * keeps all the sections; the rest are standalone pages.
+ */
 export const navLinks = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Skills", href: "/skills" },
+  { label: "Work", href: "/work" },
+  { label: "Experience", href: "/experience" },
+  { label: "Contact", href: "/contact" },
+];
+
+/**
+ * In-page anchors — only used by the desktop dot rail on the landing
+ * page, where the sections actually live. Kept separate from `navLinks`
+ * so a route change never has to double as a scroll target.
+ */
+export const sectionLinks = [
   { label: "Home", href: "#home" },
+  { label: "About", href: "#about" },
   { label: "Skills", href: "#skills" },
   { label: "Work", href: "#work" },
   { label: "Experience", href: "#experience" },
@@ -72,6 +92,41 @@ export const marqueeItems = [
 ];
 
 export type Accent = "violet" | "cyan" | "emerald" | "pink";
+
+/* ------------------------------------------------------------------
+   ABOUT — the story section (home page + /about)
+------------------------------------------------------------------ */
+export const about = {
+  label: "about me",
+  title: "I build the whole thing, not just the pretty part.",
+  intro:
+    "I'm Kuldeep Yadav, a full-stack developer from Greater Noida. I finished my B.Tech in Computer Science at Dronacharya Group of Institutions (AKTU) and I've been shipping web apps since my first year of college.",
+  paragraphs: [
+    "Most of what I know came from building things, breaking them, and rebuilding them properly. I started with plain HTML and CSS, moved to JavaScript, and then into React and Node once I realised I wanted to own the whole product — not just the screens people look at.",
+    "I interned at Hindalco Industries, where I worked on an E-Library management system in Java and MySQL, and at Bluestock Fintech, where I built an IPO application platform with React, Node and PostgreSQL. Right now I work at TaskUs on data annotation and machine learning, which taught me how much the quality of the input decides the quality of the output.",
+    "Since then I've delivered projects for local clients — admin dashboards, booking flows, inventory panels. They aren't public yet because the clients haven't cleared them for sharing, but I'm happy to walk you through any of them screen by screen.",
+  ],
+  facts: [
+    { label: "Based in", value: "Greater Noida, India" },
+    { label: "Focus", value: "Full-stack web applications" },
+    { label: "Day-to-day", value: "React · Node · Java · MySQL" },
+    { label: "Status", value: "Open to freelance & full-time" },
+  ],
+  principles: [
+    {
+      title: "Preview on day one",
+      body: "You get a live link as soon as there's something to click — not a status message promising one.",
+    },
+    {
+      title: "Tell you what broke",
+      body: "When something fails I'd rather explain the cause than quietly patch over it and hope you don't ask.",
+    },
+    {
+      title: "Code the next person can read",
+      body: "Clear names, small functions, and comments only where the logic genuinely isn't obvious.",
+    },
+  ],
+};
 
 /**
  * Accent helper classes. Every value is a theme token, so the light

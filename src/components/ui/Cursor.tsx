@@ -170,12 +170,12 @@ export function Cursor() {
         style={{ x: ringX, y: ringY }}
         className="fixed top-0 left-0 z-[200] will-change-transform"
       >
-        <span
-          data-mode={mode}
-          data-visible={visible}
-          className="cursor-ring"
-        >
-          <span className="cursor-ring__label">{label}</span>
+        <span data-mode={mode} data-visible={visible} className="cursor-ring" />
+        {/* the badge label is a sibling, not a child: the ring grows with a
+            GPU `scale()`, and text parked inside it would be stretched by
+            that same transform. Out here it stays at a legible size. */}
+        <span data-mode={mode} data-visible={visible} className="cursor-label">
+          {label}
         </span>
       </motion.div>
 

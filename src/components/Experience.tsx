@@ -5,7 +5,7 @@ import { accentStyles, experience } from "@/lib/data";
 
 export function Experience() {
   return (
-    <section id="experience" className="relative py-24 sm:py-32">
+    <section id="experience" className="relative py-16 sm:py-20">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
         <SectionHeading
           label="trajectory"

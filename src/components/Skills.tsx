@@ -131,7 +131,7 @@ export function Skills() {
   const tilt = finePointer && !reduceMotion;
 
   return (
-    <section id="skills" className="relative py-24 sm:py-32">
+    <section id="skills" className="relative py-16 sm:py-20">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
         <SectionHeading
           label="capabilities"

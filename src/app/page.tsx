@@ -1,3 +1,4 @@
+import { About } from "@/components/About";
 import { Approach } from "@/components/Approach";
 import { Contact } from "@/components/Contact";
 import { Experience } from "@/components/Experience";
@@ -25,6 +26,7 @@ export default function Home() {
         />
       </div>
 
+      <About />
       <Skills />
       <Projects />
       <ProjectShowcase />

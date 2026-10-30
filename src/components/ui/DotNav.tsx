@@ -1,9 +1,10 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useReady } from "@/components/Intro";
-import { navLinks } from "@/lib/data";
+import { sectionLinks } from "@/lib/data";
 import { EASE } from "@/lib/motion";
 import { scrollToSection } from "@/lib/scroll";
 
@@ -12,14 +13,21 @@ import { scrollToSection } from "@/lib/scroll";
  * Hover expands the dot + reveals its tooltip, clicking scrolls to the
  * section, and the active dot is tracked with an IntersectionObserver so
  * the halo glides between dots as the page scrolls.
+ *
+ * It only belongs on the landing page — every other route renders a
+ * single section, so there is nothing here for it to jump between.
  */
 export function DotNav() {
   const ready = useReady();
   const reduceMotion = useReducedMotion();
+  const pathname = usePathname();
+  const isLanding = pathname === "/";
   const [active, setActive] = useState("#home");
 
   useEffect(() => {
-    const sections = navLinks
+    if (!isLanding) return;
+
+    const sections = sectionLinks
       .map((link) => document.getElementById(link.href.replace("#", "")))
       .filter((el): el is HTMLElement => Boolean(el));
 
@@ -36,7 +44,9 @@ export function DotNav() {
 
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
-  }, []);
+  }, [isLanding]);
+
+  if (!isLanding) return null;
 
   return (
     <motion.nav
@@ -60,7 +70,7 @@ export function DotNav() {
           className="absolute inset-y-5 left-1/2 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-line to-transparent"
         />
 
-        {navLinks.map((link) => {
+        {sectionLinks.map((link) => {
           const isActive = active === link.href;
 
           return (

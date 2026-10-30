@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ArrowDown, Github, Linkedin, Mail } from "@/components/ui/Icons";
 import { CTAButton } from "@/components/ui/Magnetic";
 import { navLinks, site, socials } from "@/lib/data";
@@ -42,13 +43,13 @@ export function Footer() {
             <ul className="mt-5 space-y-3">
               {navLinks.map((link) => (
                 <li key={link.href}>
-                  <a
+                  <Link
                     href={link.href}
                     className="group inline-flex items-center gap-2 text-[0.9rem] text-ink-mute transition-colors hover:text-ink-strong"
                   >
                     <span className="h-[1px] w-0 bg-accent transition-all duration-400 group-hover:w-4" />
                     {link.label}
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
@@ -101,13 +102,13 @@ export function Footer() {
           <p className="font-mono text-[0.6rem] tracking-[0.16em] text-ink-dim uppercase">
             built with next.js · tailwind · framer motion
           </p>
-          <a
-            href="#home"
+          <Link
+            href="/"
             className="group inline-flex items-center gap-2 rounded-full border border-line bg-surface-2 px-4 py-2 font-mono text-[0.6rem] tracking-[0.18em] text-ink-mute uppercase transition-colors hover:border-accent-2/50 hover:text-accent-2-soft"
           >
-            back to top
+            back to home
             <ArrowDown className="h-3.5 w-3.5 rotate-180 transition-transform duration-400 group-hover:-translate-y-0.5" />
-          </a>
+          </Link>
         </div>
       </div>
 

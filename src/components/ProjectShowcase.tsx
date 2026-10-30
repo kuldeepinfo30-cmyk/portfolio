@@ -21,7 +21,7 @@ export function ProjectShowcase() {
   const live = clientProjects.length;
 
   return (
-    <section id="vault" className="relative pb-24 sm:pb-32">
+    <section id="vault" className="relative pb-16 sm:pb-20">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
         <SectionHeading
           label="client vault"

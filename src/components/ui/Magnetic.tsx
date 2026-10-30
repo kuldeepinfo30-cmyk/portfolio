@@ -1,12 +1,8 @@
 "use client";
 
-import {
-  motion,
-  useMotionTemplate,
-  useMotionValue,
-  useSpring,
-} from "framer-motion";
-import { useRef, type MouseEvent, type ReactNode } from "react";
+import { motion, useMotionTemplate, useMotionValue, useSpring } from "framer-motion";
+import Link from "next/link";
+import { useRef, type ElementType, type MouseEvent, type ReactNode } from "react";
 
 type MagneticProps = {
   children: ReactNode;
@@ -78,6 +74,9 @@ const CTA_STYLES: Record<NonNullable<CTAProps["variant"]>, string> = {
 
 /**
  * Neon call-to-action link with a magnetic pull + a cursor-tracking sheen.
+ *
+ * Hrefs that start with `/` route through `next/link`, so an internal CTA
+ * changes page client-side instead of triggering a full browser reload.
  */
 export function CTAButton({
   href,
@@ -93,6 +92,8 @@ export function CTAButton({
   const my = useMotionValue(50);
   const sheen = useMotionTemplate`radial-gradient(circle at ${mx}% ${my}%, rgba(255,255,255,0.45), transparent 55%)`;
 
+  const Tag: ElementType = href.startsWith("/") && !external ? Link : "a";
+
   function handleMove(event: MouseEvent<HTMLAnchorElement>) {
     const el = anchorRef.current;
     if (!el) return;
@@ -103,7 +104,7 @@ export function CTAButton({
 
   return (
     <Magnetic strength={strength}>
-      <a
+      <Tag
         ref={anchorRef}
         href={href}
         onMouseMove={handleMove}
@@ -123,7 +124,7 @@ export function CTAButton({
             {icon}
           </span>
         ) : null}
-      </a>
+      </Tag>
     </Magnetic>
   );
 }
@@ -145,6 +146,8 @@ export function LiquidButton({
   const my = useMotionValue(50);
   const sheen = useMotionTemplate`radial-gradient(160px circle at ${mx}% ${my}%, rgba(255,255,255,0.5), transparent 72%)`;
 
+  const Tag: ElementType = href.startsWith("/") && !external ? Link : "a";
+
   function handleMove(event: MouseEvent<HTMLAnchorElement>) {
     const el = anchorRef.current;
     if (!el) return;
@@ -155,7 +158,7 @@ export function LiquidButton({
 
   return (
     <Magnetic strength={strength}>
-      <a
+      <Tag
         ref={anchorRef}
         href={href}
         onMouseMove={handleMove}
@@ -182,7 +185,7 @@ export function LiquidButton({
             </span>
           ) : null}
         </span>
-      </a>
+      </Tag>
     </Magnetic>
   );
 }
@@ -203,7 +206,9 @@ export function IconButton({
   onClick?: () => void;
   className?: string;
 }) {
-  const Tag = href ? "a" : "button";
+  const internal = Boolean(href?.startsWith("/"));
+  const Tag: ElementType = !href ? "button" : internal ? Link : "a";
+
   return (
     <Magnetic strength={0.4}>
       <Tag
@@ -212,7 +217,9 @@ export function IconButton({
         aria-label={label}
         title={label}
         {...(href
-          ? { target: "_blank", rel: "noopener noreferrer" }
+          ? internal
+            ? undefined
+            : { target: "_blank", rel: "noopener noreferrer" }
           : { type: "button" })}
         className={`inline-flex h-11 w-11 items-center justify-center rounded-full border border-line bg-surface-2 text-ink-mute transition-all duration-400 hover:border-accent/50 hover:bg-accent/10 hover:text-ink-strong ${className}`}
       >

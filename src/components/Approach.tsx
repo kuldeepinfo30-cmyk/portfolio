@@ -9,7 +9,7 @@ const ICONS = { zap: Zap, layers: Layers, clock: Clock } as const;
 
 export function Approach() {
   return (
-    <section id="approach" className="relative py-24 sm:py-32">
+    <section id="approach" className="relative py-16 sm:py-20">
       <div className="mx-auto w-full max-w-7xl px-5 sm:px-8">
         <SectionHeading
           label="how i work"

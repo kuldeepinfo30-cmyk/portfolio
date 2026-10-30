@@ -39,9 +39,12 @@ export function Backdrop() {
         }}
       />
 
-      {/* grain + vignette */}
+      {/* grain + vignette. Deliberately *not* `mix-blend-overlay`: this
+          layer covers the whole viewport and the aurora blobs underneath
+          never stop moving, so a blend mode here would force the browser
+          to re-blend a full-screen surface on every single frame. */}
       <div
-        className="noise absolute inset-0 mix-blend-overlay"
+        className="noise absolute inset-0"
         style={{ opacity: "var(--grain)" }}
       />
       <div className="absolute inset-0" style={{ backgroundImage: "var(--vignette)" }} />

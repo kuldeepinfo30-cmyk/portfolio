@@ -18,12 +18,17 @@ export function HeroStage() {
   const px = useMotionValue(0);
   const py = useMotionValue(0);
 
-  const spring = { stiffness: 55, damping: 18, mass: 0.9 };
+  /* Firmer than the old { 55, 18, 0.9 }: that spring was so under-damped
+     it kept updating for well over a second after the pointer stopped,
+     and each update re-composites a very large blurred layer. This one
+     settles in a few frames, so the backdrop goes quiet as soon as the
+     mouse does. */
+  const spring = { stiffness: 110, damping: 28, mass: 0.6 };
   const sx = useSpring(px, spring);
   const sy = useSpring(py, spring);
 
-  const auraX = useTransform(sx, [-1, 1], [-90, 90]);
-  const auraY = useTransform(sy, [-1, 1], [-70, 70]);
+  const auraX = useTransform(sx, [-1, 1], [-70, 70]);
+  const auraY = useTransform(sy, [-1, 1], [-54, 54]);
 
   const shapeX = useTransform(sx, [-1, 1], [30, -30]);
   const shapeY = useTransform(sy, [-1, 1], [20, -20]);
@@ -54,11 +59,14 @@ export function HeroStage() {
       {/* slowly drifting technical grid */}
       <div className="grid-drift mask-fade-y absolute inset-0 opacity-60" />
 
-      {/* pointer-tracking aura behind the headline */}
+      {/* pointer-tracking aura behind the headline. A 90px blur on a
+          54rem surface was the most expensive thing in the hero — the
+          blur is cached, but the layer is enormous, so it was trimmed
+          to a size that still reads as a soft glow. */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
         <motion.div
           style={{ x: auraX, y: auraY }}
-          className="will-change-transform h-[38rem] w-[38rem] rounded-full bg-[radial-gradient(circle,rgba(var(--glow),0.32),rgba(var(--glow-2),0.12)_45%,transparent_72%)] blur-[90px] sm:h-[54rem] sm:w-[54rem]"
+          className="will-change-transform h-[32rem] w-[32rem] rounded-full bg-[radial-gradient(circle,rgba(var(--glow),0.32),rgba(var(--glow-2),0.12)_45%,transparent_72%)] blur-[60px] sm:h-[46rem] sm:w-[46rem]"
         />
       </div>
 

@@ -97,7 +97,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden pt-28 pb-24 sm:pt-32 lg:pb-28"
+      className="relative flex min-h-[100svh] flex-col justify-center overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-20"
     >
       {/* animated backdrop: starfield, grid, aura, abstract shape */}
       <HeroStage />
@@ -229,14 +229,14 @@ export function Hero() {
             className="mt-9 flex flex-wrap items-center gap-3 sm:mt-11 sm:gap-4"
           >
             <LiquidButton
-              href="#work"
+              href="/work"
               icon={<Sparkle className="h-4 w-4 text-accent-2-soft" />}
               className="w-full sm:w-auto"
             >
               View my work
             </LiquidButton>
             <CTAButton
-              href="#contact"
+              href="/contact"
               variant="ghost"
               icon={<TerminalIcon className="h-4 w-4" />}
               className="w-full sm:w-auto"

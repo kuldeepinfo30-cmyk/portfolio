@@ -327,12 +327,13 @@
   border: 1px solid var(--line);
 }
 
-/* the one surface where the frost actually shows and is worth its cost:
-   the floating navbar (a handful of elements, not dozens) */
+/* the navbar used to carry the only `backdrop-filter` on the site. It is
+   a *fixed* element, so the browser had to re-read and re-blur everything
+   sliding underneath it on every single scroll frame — the single biggest
+   reason scrolling felt heavy. A slightly more opaque panel with the same
+   hairline border reads almost identically and costs nothing per frame. */
 .glass-nav {
-  background: color-mix(in srgb, var(--panel) 74%, transparent);
-  backdrop-filter: blur(16px) saturate(150%);
-  -webkit-backdrop-filter: blur(16px) saturate(150%);
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
   border: 1px solid var(--line);
 }
 
@@ -448,8 +449,11 @@
 .aurora {
   position: absolute;
   border-radius: 999px;
-  filter: blur(64px);
-  opacity: 0.5;
+  /* 64px was blurring three ~34rem layers, and every one of those blurred
+     textures has to be held in GPU memory while the page scrolls. 44px
+     reads the same at these sizes and costs noticeably less. */
+  filter: blur(44px);
+  opacity: 0.45;
   /* promoted once, then only its transform ever changes — the blurred
      texture is cached on the GPU and never re-rasterised while scrolling */
   transform: translateZ(0);
@@ -602,7 +606,7 @@
     transform: translate3d(0, 0, 0);
   }
   to {
-    transform: translate3d(-420px, 300px, 0);
+    transform: translate3d(-200px, 140px, 0);
   }
 }
 
@@ -673,9 +677,12 @@
     520px 520px;
   animation: star-drift 170s linear infinite;
   position: absolute;
-  /* the drift travels 420×300px, so the layer is padded to match — an
-     oversized composited layer paints once, a repainted one never rests */
-  inset: -460px;
+  /* the layer has to be padded by however far the drift travels, or its
+     edges slide into view. That padding used to be 460px on *every* side
+     of a full-viewport layer — a multi-megapixel surface the compositor
+     carried around on every scroll frame. Trimming both the travel and
+     the padding keeps the effect and drops most of the cost. */
+  inset: -240px;
   will-change: transform;
 }
 
@@ -700,8 +707,8 @@
     var(--accent-4),
     var(--accent)
   );
-  filter: blur(46px);
-  opacity: 0.32;
+  filter: blur(30px);
+  opacity: 0.34;
   animation: orb-morph 18s ease-in-out infinite;
 }
 
@@ -774,8 +781,11 @@
   width: 160%;
   aspect-ratio: 1;
   translate: -50% -50%;
-  opacity: 0.65;
-  mix-blend-mode: screen;
+  opacity: 0.55;
+  /* no `mix-blend-mode: screen` here. The layer spins continuously, and a
+     blend mode means the result can't be cached — the browser re-blends
+     it against the button face on every frame, forever, even when the
+     page is completely idle. Plain opacity looks the same. */
   background: conic-gradient(
     from 180deg,
     transparent 0deg,
@@ -1078,20 +1088,19 @@ html.cursor-none [contenteditable="true"] {
   cursor: auto !important;
 }
 
-/* the ring — sits on the lagging spring, so it drifts behind the dot */
+/* the ring — sits on the lagging spring, so it drifts behind the dot.
+   The whole thing grows with `transform: scale()`, never `width`/`height`:
+   resizing the box re-lays-out and repaints this layer on every frame of
+   the transition, while a scale is one composited transform that the GPU
+   interpolates for free. Growth is keyed off `--cursor-scale` so each
+   mode is a single number. */
 .cursor-ring {
-  /* Centred inside the zero-size anchor that Framer translates. Keeping
-     the centring on this element (never the motion element) means the
-     press-scale below can't multiply the anchor's translation. */
   position: absolute;
   top: 0;
   left: 0;
-  transform: translate(-50%, -50%)
-    scale(calc(var(--cursor-scale, 1) * var(--cursor-press, 1)));
-  display: grid;
-  place-items: center;
-  width: 2.1rem;
-  height: 2.1rem;
+  display: block;
+  width: 2rem;
+  height: 2rem;
   border-radius: 999px;
   border: 1px solid rgba(var(--glow), 0.5);
   background: rgba(var(--glow), 0.05);
@@ -1099,15 +1108,16 @@ html.cursor-none [contenteditable="true"] {
     0 0 20px -6px rgba(var(--glow), 0.75),
     inset 0 0 14px -8px rgba(var(--glow-2), 0.9);
   opacity: 0;
+  transform: translate(-50%, -50%)
+    scale(calc(var(--cursor-scale, 1) * var(--cursor-press, 1)));
+  transform-origin: 50% 50%;
   will-change: transform;
   transition:
-    width 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-    height 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.18s ease,
-    opacity 0.35s ease,
-    border-color 0.45s ease,
-    background-color 0.45s ease,
-    box-shadow 0.45s ease;
+    transform 0.26s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.3s ease,
+    border-color 0.4s ease,
+    background-color 0.4s ease,
+    box-shadow 0.4s ease;
 }
 
 .cursor-ring[data-visible="true"] {
@@ -1116,51 +1126,61 @@ html.cursor-none [contenteditable="true"] {
 
 /* hovering a link or button — the ring opens up a touch */
 .cursor-ring[data-mode="link"] {
-  width: 3.1rem;
-  height: 3.1rem;
+  --cursor-scale: 1.25;
   border-color: rgba(var(--glow-2), 0.7);
   background: rgba(var(--glow-2), 0.08);
 }
 
-/* hovering a project card — a full "View Project" badge.
-   Deliberately blur-free: this ring tracks the pointer every frame, and a
-   moving backdrop-filter would force the browser to re-blur the page
-   underneath on every one of those frames. A layered rgba fill reads the
-   same without the per-frame cost. */
+/* hovering a project card — a compact 3rem badge (2rem × 1.5).
+   Deliberately blur-free and deliberately small: this layer tracks the
+   pointer every frame, and a moving backdrop-filter or a large surface
+   is the one thing a cursor should never be. */
 .cursor-ring[data-mode="view"] {
-  width: 7rem;
-  height: 7rem;
+  --cursor-scale: 1.5;
   border-color: rgba(var(--glow-2), 0.8);
-  background:
-    radial-gradient(
-      circle at 50% 50%,
-      rgba(var(--glow), 0.22),
-      rgba(var(--glow), 0.1) 62%,
-      rgba(var(--glow), 0.04)
-    );
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(var(--glow), 0.24),
+    rgba(var(--glow), 0.1) 62%,
+    rgba(var(--glow), 0.04)
+  );
   box-shadow:
-    0 0 46px -8px rgba(var(--glow), 0.95),
-    0 0 90px -20px rgba(var(--glow-2), 0.8),
-    inset 0 0 30px -12px rgba(var(--glow-2), 0.9);
+    0 0 26px -6px rgba(var(--glow), 0.95),
+    0 0 50px -14px rgba(var(--glow-2), 0.8),
+    inset 0 0 20px -10px rgba(var(--glow-2), 0.9);
 }
 
-.cursor-ring__label {
+/* "View Project" rides just under the badge instead of inside it. At a
+   3rem ring the text would be microscopic, and out here it also never
+   has to fight the ring's scale transform — so it stays crisp and
+   legible at any size. */
+.cursor-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: block;
+  padding: 0.3rem 0.62rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: color-mix(in srgb, var(--canvas-deep) 92%, transparent);
   font-family: var(--font-mono), ui-monospace, monospace;
-  font-size: 0.54rem;
-  letter-spacing: 0.18em;
+  font-size: 0.56rem;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
   white-space: nowrap;
   color: var(--ink-strong);
   opacity: 0;
-  transform: scale(0.86);
+  pointer-events: none;
+  will-change: transform, opacity;
+  transform: translate(-50%, 1.5rem) scale(0.92);
   transition:
-    opacity 0.3s ease 0.06s,
-    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1) 0.06s;
+    opacity 0.26s ease,
+    transform 0.34s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.cursor-ring[data-mode="view"] .cursor-ring__label {
+.cursor-label[data-visible="true"][data-mode="view"] {
   opacity: 1;
-  transform: scale(1);
+  transform: translate(-50%, 1.9rem) scale(1);
 }
 
 /* the dot — snaps onto the pointer, so it feels exact rather than floaty */
@@ -1202,9 +1222,9 @@ html.cursor-none [contenteditable="true"] {
 
 /* press feedback — both layers settle inward. Driven through the same
    `scale()` that carries the centring (never the standalone `scale`
-   property, which CSS composes *before* the translation and would
-   therefore scale the anchor's position too — that was the bug that made
-   the cursor jump toward the top-left corner on every click). */
+   property, which CSS composes *before* the `transform` property and
+   would therefore scale the anchor's position too — that was the bug that
+   made the cursor jump toward the top-left corner on every click). */
 html.cursor-press .cursor-ring {
   --cursor-press: 0.86;
 }
@@ -1216,7 +1236,8 @@ html.cursor-press .cursor-dot {
 /* belt & braces: never show it on a touch screen */
 @media (hover: none), (pointer: coarse) {
   .cursor-ring,
-  .cursor-dot {
+  .cursor-dot,
+  .cursor-label {
     display: none !important;
   }
 }
@@ -1392,7 +1413,7 @@ html.theme-switching *::after {
 
   /* the cursor itself still works — it just stops gliding and snapping */
   .cursor-ring,
-  .cursor-ring__label,
+  .cursor-label,
   .cursor-dot {
     transition: none !important;
   }
