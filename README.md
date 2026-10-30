@@ -4,7 +4,7 @@ A personal portfolio and freelance landing site for **Kuldeep Yadav**, a full-st
 
 The site introduces who I am, what I work with, the projects I have shipped, and how to get in touch. It is built to be read quickly by a potential client or recruiter: every section answers one question, and the whole thing stays fast while still moving.
 
-Live site: _add your Vercel URL here_
+Live site: https://portfolio-kuldeep-yadav-10.vercel.app/
 
 ---
 
