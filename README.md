@@ -1,6 +1,6 @@
 # Portfolio — Kuldeep Yadav
 
-A personal portfolio and freelance landing site for **Kuldeep Yadav**, a full-stack developer based in Greater Noida, India.
+This is my personal portfolio and freelance landing site for **Kuldeep Yadav**, a full-stack developer based in Greater Noida, India.
 
 The site introduces who I am, what I work with, the projects I have shipped, and how to get in touch. It is built to be read quickly by a potential client or recruiter: every section answers one question, and the whole thing stays fast while still moving.
 
@@ -135,6 +135,6 @@ To deploy from scratch: import this repository on Vercel, keep the detected fram
 - **Email:** kuldeepinfo30@gmail.com
 - **GitHub:** [kuldeepinfo30-cmyk](https://github.com/kuldeepinfo30-cmyk)
 - **LinkedIn:** [kuldeep-yadav](https://www.linkedin.com/in/kuldeep-yadav-159146445/)
-- **Location:** Greater Noida, India
+- **Location:** Greater Noida, India,
 
 Open to freelance projects and full-time roles.
